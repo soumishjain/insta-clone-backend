@@ -6,7 +6,7 @@ const likeSchema = new mongoose.Schema({
         ref : "posts",
         required : [true,"post id is required to like a post"]
     },
-    userName : {
+    username : {
         type : String,
         required : [true,"username is required to  like a post"]
     }
@@ -14,7 +14,7 @@ const likeSchema = new mongoose.Schema({
     timestamps : true
 })
 
-likeSchema.index({postId : 1 , userName : 1} , {unique : true})
+likeSchema.index({postId : 1 , username : 1} , {unique : true})
 
 const likeModel = mongoose.model("likes",likeSchema)
 

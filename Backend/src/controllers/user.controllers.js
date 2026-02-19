@@ -4,11 +4,11 @@ const postModel = require('../models/post.models')
 const userModel = require('../models/user.models')
 
 async function followUser(req,res){
-    const followerName = req.user.userName
-    const followeeName = req.params.userName
+    const followerName = req.user.username
+    const followeeName = req.params.username
 
     const isUserExist = await userModel.findOne({
-        userName : followeeName
+        username : followeeName
     })
 
     if(!isUserExist){
@@ -48,8 +48,8 @@ async function followUser(req,res){
 }
 
 async function unfollowUser(req,res){
-    const followerName = req.user.userName
-    const followeeName = req.params.userName
+    const followerName = req.user.username
+    const followeeName = req.params.username
 
     const isUserFollowed = await followModel.findOne({
         followee : followeeName,
@@ -75,7 +75,7 @@ async function unfollowUser(req,res){
 async function likePost(req,res){
 
     const postId = req.params.postId
-    const userName = req.user.userName
+    const username = req.user.username
 
     const isPostExist = await postModel.findById(postId)
     if(!isPostExist) {
@@ -87,7 +87,7 @@ async function likePost(req,res){
 
     const isAlreadyLiked = await likeModel.findOne({
         postId : postId,
-        userName : userName
+        username : username
     })
 
     if(isAlreadyLiked){
@@ -99,7 +99,7 @@ async function likePost(req,res){
 
     const likeRecord = await likeModel.create({
         postId : postId,
-        userName : userName
+        username : username
     })
 
 const updatedPost = await postModel.findByIdAndUpdate(
@@ -119,7 +119,7 @@ console.log("Updated Like Count:", updatedPost.likeCount)
 
 async function dislikePost(req,res){
     const postId = req.params.postId
-    const userName = req.user.userName
+    const username = req.user.username
 
     const isPostExist = await postModel.findById(postId)
     if(!isPostExist) {
@@ -130,7 +130,7 @@ async function dislikePost(req,res){
 
     const isLiked = await likeModel.findOne({
         postId : postId,
-        userName : userName
+        username : username
     })
 
     if(!isLiked){
@@ -142,7 +142,7 @@ async function dislikePost(req,res){
 
     await likeModel.findOneAndDelete({
         postId : postId,
-        userName : userName
+        username : username
     })
 
     const updatePost = await postModel.findByIdAndUpdate(
@@ -158,9 +158,9 @@ async function dislikePost(req,res){
 }
 
 async function getFollowRequests(req,res) {
-    const userName = req.user.userName
+    const username = req.user.username
     const requests = await followModel.find({
-        followee : userName,
+        followee : username,
         status: 'pending'
     })
     res.status(200).json({

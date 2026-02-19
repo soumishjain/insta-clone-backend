@@ -4,11 +4,11 @@ const bcrypt = require('bcryptjs')
 
 async function registerUser(req, res) {
     console.log("register hit route")
-    const { userName, email, password, bio, profileImage } = req.body
+    const { username, email, password, bio, profileImage } = req.body
 
     const isUserAlreadyExists = await userModel.findOne({
         $or: [
-            { userName: userName },
+            { username: username },
             { email: email }
         ]
     })
@@ -22,18 +22,18 @@ async function registerUser(req, res) {
     const hash = await bcrypt.hash(password,10)
 
     const user = await userModel.create({
-        userName, email, password: hash, bio, profileImage
+        username, email, password: hash, bio, profileImage
     })
     const token = jwt.sign({
         id: user._id,
-        userName : user.userName
+        username : user.username
     }, process.env.JWT_SECRET, { expiresIn: '1d' })
     res.cookie("token", token)
 
     res.status(209).json({
         message: "User successfully registerd",
         user: {
-            userName: user.userName,
+            username: user.username,
             email: user.email,
             bio: user.bio,
             profileImage: user.profileImage
@@ -44,11 +44,11 @@ async function registerUser(req, res) {
 
 async function loginUser(req, res) {
     console.log('route hit')
-    const { userName, email, password } = req.body;
+    const { username, email, password } = req.body;
 
     const user = await userModel.findOne({
         $or: [
-            { userName: userName },
+            { username: username },
             { email: email }
         ]
     })
@@ -68,7 +68,7 @@ async function loginUser(req, res) {
 
     const token = jwt.sign(
         {id : user._id,
-            userName : user.userName
+            username : user.username
         },
         process.env.JWT_SECRET, 
         { expiresIn: '1d' })
@@ -77,7 +77,7 @@ async function loginUser(req, res) {
     res.status(200).json({
         message : "User Successfully Logged in",
         user : {
-            userName : user.userName,
+            username : user.username,
             email : user.email,
             bio : user.bio,
             profileImage : user.profileImage
