@@ -1,0 +1,43 @@
+@mixin flex-col($gap: 0rem){
+    display: flex;
+    flex-direction: column;
+    gap: $gap;
+}
+
+@mixin display-center(){
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+main{
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .form-container{
+        min-width: 400px;
+        @include flex-col(1rem);
+        form{
+            @include flex-col((1rem));
+
+            input,button{
+                padding-inline: 1rem;
+                padding-block: 0.8rem;
+                border-radius: 1rem;
+                border: none;
+                outline: none;
+            }
+            button{
+                background: rgb(255, 33, 33);
+            }
+        }
+        p{
+            .opp-nav{
+                color: rgb(255, 31, 31);
+                text-decoration: none;
+            }
+        }
+    }
+}
